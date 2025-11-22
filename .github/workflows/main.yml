@@ -23,12 +23,13 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-      - run: npm ci
+      # Если у тебя есть package-lock.json, можешь вернуть npm ci
+      - run: npm install
       - run: npm run build
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -36,6 +37,5 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - id: deployment
         uses: actions/deploy-pages@v4
